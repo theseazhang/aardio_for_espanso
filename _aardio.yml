@@ -1,42 +1,109 @@
 # For a complete introduction, visit the official docs at: https://espanso.org/docs/
 
 matches:
+  - trigger: ';atom'
+    label: aardio - 限制窗口多开
+    replace: |
+      import win.ui.atom
+      var atom, hwnd = winform.atom("")
+      if(!atom) return win.setForeground(hwnd);
+
   - trigger: ';is'
-    replace: |+
+    replace: |
       import string
 
   - trigger: ';it'
-    replace: |+
+    replace: |
       import table
 
   - trigger: ';ic'
-    replace: |+
+    replace: |
       import console
 
+  - trigger: ';iw'
+    replace: |
+      import web.json
+
+  - trigger: ';jp'
+    label: aardio - json文本解析
+    replace: |
+      var res = web.json.tryParse()
+      if(!res) return null, "json解析失败";
+
   - trigger: ';cl'
-    replace: |+
+    replace: |
       console.log($|$)
 
   - trigger: ';cd'
-    replace: |+
+    replace: |
       console.dumpJson($|$)
 
   - trigger: 'cccc'
     label: aardio - 快速调试一个函数
-    force_mode: clipboard
     replace: |
       var res, err = testFunc()
       console.dumpJson({res=res; err=err})
       console.askYesNo("按Y键继续,按N键取消")
 
+  - triggers: [';lmenu', ';lpop']
+    label: aardio - listview创建右键菜单
+    replace: |
+      winform.popmenu = win.ui.popmenu(winform)
+
+      winform.listview.onnotify = function(id,code,ptr){
+          select(code) {
+            case 0xFFFFFFFB/*_NM_RCLICK*/ {
+              winform.popmenu.popup(x,y,true);
+            }
+          }
+      }
+
+      winform.popmenu.add('自定义菜单',function(id){
+          
+      });
+
+      winform.popmenu.add()
+
+      winform.popmenu.add('清空列表',function(id){
+          winform.listview.clear()
+      });
+
+  - trigger: ';wson'
+    label: aardio - Network.responseReceived
+    replace: |
+      ws.on("Network.responseReceived", function(param){
+          var requestId = param[['requestId']]
+          if(!requestId) return;
+          var url = param[['response']][['url']]
+          if(!url) return;
+
+          if(string.indexOf(url, "")){
+                  
+          }
+      })
+
   - trigger: ';wsbody'
-    label: aardio - 远程调试获取响应body
-    force_mode: clipboard
+    label: aardio - Network.getResponseBody
     replace: |
       ws.Network.getResponseBody(requestId = requestId).end = function(data){
           if(!data[['body']]) return;
       };
 
   - trigger: ';wsgo'
-    label: aardio - 远程调试跳转链接
+    label: aardio - ws.Page.navigate
     replace: 'ws.Page.navigate(url = "$|$")'
+
+  - trigger: ';wsck'
+    label: aardio - ws.Network.getCookies
+    replace: |
+      ws.Network.getCookies().end = function(res){
+          var tab = res[['cookies']]
+          var t = {}
+          for(i=1;#tab;1){
+              var k = tab[i][['name']]
+              var v = tab[i][['value']]
+              table.push(t, k+"="+v)
+          }
+          var cookie = string.join(t, "; ")
+          
+      }
