@@ -1,5 +1,42 @@
 # For a complete introduction, visit the official docs at: https://espanso.org/docs/
 
 matches:
+  - trigger: ';is'
+    replace: |+
+      import string
+
+  - trigger: ';it'
+    replace: |+
+      import table
+
+  - trigger: ';ic'
+    replace: |+
+      import console
+
   - trigger: ';cl'
-    replace: 'console.log($|$)'
+    replace: |+
+      console.log($|$)
+
+  - trigger: ';cd'
+    replace: |+
+      console.dumpJson($|$)
+
+  - trigger: 'cccc'
+    label: aardio - 快速调试一个函数
+    force_mode: clipboard
+    replace: |
+      var res, err = testFunc()
+      console.dumpJson({res=res; err=err})
+      console.askYesNo("按Y键继续,按N键取消")
+
+  - trigger: ';wsbody'
+    label: aardio - 远程调试获取响应body
+    force_mode: clipboard
+    replace: |
+      ws.Network.getResponseBody(requestId = requestId).end = function(data){
+          if(!data[['body']]) return;
+      };
+
+  - trigger: ';wsgo'
+    label: aardio - 远程调试跳转链接
+    replace: 'ws.Page.navigate(url = "$|$")'

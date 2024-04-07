@@ -6,5 +6,5 @@
 filter_exec: 'aardio.exe'
 
 extra_includes:
-  - '../match/aardio/_aardio.yml'
+  - '../match/aardio_for_espanso/_aardio.yml'
 ```
