@@ -1,0 +1,7 @@
+author: 沧海
+description: 专用于aardio编程语言IDE的快捷短语
+name: aardio_for_espanso
+title: Aardio Package
+version: 0.0.1
+homepage: 'https://github.com/theseazhang/aardio_for_espanso'
+tags: ['aardio', 'aar']
